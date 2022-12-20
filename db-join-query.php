@@ -9,7 +9,7 @@ WHERE `degrees`.`name` = 'Corso di Laurea in Economia';
 
 2.
 
-SELECT *
+SELECT `degrees`.*
 FROM `degrees`
 JOIN `departments` ON `departments`.`id` = `degrees`.`department_id`
 WHERE `departments`.`name` = 'Dipartimento di Neuroscienze' && `degrees`.`level` = 'magistrale';
@@ -47,3 +47,13 @@ JOIN `courses` ON `courses`.`degree_id` = `degrees`.`id`
 JOIN `course_teacher` ON `course_teacher`.`course_id` = `courses`.`id`
 JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id`
 WHERE `departments`.`name` = 'Dipartimento di Matematica';
+
+7.
+
+SELECT `students`.*, `courses`.`name` AS `nome_corso`, COUNT(`exam_student`.`vote`) AS `numero_tentativi`, MAX(`exam_student`.`vote`) AS `voto_massimo`
+FROM `students`
+JOIN `exam_student` ON `exam_student`.`student_id` = `students`.`id`
+JOIN `exams` ON `exams`.`id` = `exam_student`.`exam_id`
+JOIN `courses` ON `courses`.`id` = `exams`.`course_id`
+GROUP BY `students`.`id`, `courses`.`id`
+HAVING `voto_massimo` >= 18;
